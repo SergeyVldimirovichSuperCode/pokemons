@@ -1,23 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
+import { Pagination } from "@mui/material";
+const Paginations = ({pokemonsPerPage, totalPokemons, paginate}) =>{
 
-const Pagination = ({pokemonsPerPage, totalPokemons, paginate}) =>{
+  
+    const [page, setPage] = useState(1);
+    paginate(page);
+    const onClickPage = (event, value) => {
+        paginate(page);
+      setPage(value);
    
-    const pageNumbers = []
-    for(let i = 1; i <= Math.ceil(totalPokemons/pokemonsPerPage); i++){
-        pageNumbers.push(i)
     }
+    
+          
+   
+        
+    
+    console.log(page)
+    
     return(
-        <div className="paginations">
-            <ul className="pagenation">
-                {
-                    pageNumbers.map(number =>(
-                        <li className="page-item pagination_num" key={number}>
-                            <a href="#" className="page-link" onClick={() => paginate(number)}>{number}</a>
-                        </li>
-                    ))
-                }
-            </ul>
-        </div>
+        <Pagination count={ Math.ceil(totalPokemons/pokemonsPerPage)}  onChange={onClickPage} hidePrevButton hideNextButton />
     )
 }
-export default Pagination
+export default Paginations

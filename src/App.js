@@ -36,7 +36,7 @@ export default function App() {
   if (!data) return "Loading...";
  
   const currentPokemons = data.results.slice(firstPokemonsIndex, lastPokemonsIndex)
-
+    console.log(paginate)
 
   return (
 
