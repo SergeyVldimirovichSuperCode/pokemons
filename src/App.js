@@ -18,41 +18,41 @@ export default function App() {
     const [currentPage, setCurrentPage] = useState(1)
     const [pokemonPerPage] = useState(12)
     const [itemsPerPage, setitemsPerPage] = useState(0)
-   
+
     const { data, error } = useSWR(
         `https://pokeapi.co/api/v2/pokemon?limit=12&offset=${itemsPerPage}`,
         fetcher
     );
 
-  
 
-    
+
+
 
     const paginate = pageNumber => setCurrentPage(pageNumber)
 
-    
-  
+
+
     if (error) return "An error has occurred.";
     if (!data) return "Loading...";
     console.log(data)
-    
+
     const currentPokemons = data.results.slice(0, pokemonPerPage)
     const countPokemons = data.count
-   
-   
-    
+
+
+
     const onClickPage = (event, value) => {
-        
-       
+
+
         paginate(value);
         setPage(value);
-        setitemsPerPage(12*(value-1))
-        
+        setitemsPerPage(12 * (value - 1))
+
     }
 
- 
+
     return (
-        
+
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} columns={16}>
                 {
@@ -79,7 +79,7 @@ export default function App() {
                     })
                 }
             </Grid>
-            <Pagination count={Math.ceil(countPokemons/12)} page={page} onChange={onClickPage} hidePrevButton hideNextButton />
+            <Pagination count={Math.ceil(countPokemons / 12)} page={page} onChange={onClickPage} hidePrevButton hideNextButton />
         </Box>
     );
 }
