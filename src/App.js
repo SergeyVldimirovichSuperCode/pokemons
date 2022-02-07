@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -8,16 +8,15 @@ import { CardActionArea } from '@mui/material';
 import Information from "./componets/informations";
 import Image from "./componets/image";
 import Box from '@mui/material/Box';
-import Pagination from "./componets/pagination";
+import { Pagination } from "@mui/material";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function App() {
 
-    const [pokemons, setPokemon] = useState([])
+
     const [currentPage, setCurrentPage] = useState(1)
     const [pokemonPerPage] = useState(12)
-
 
 
     const lastPokemonsIndex = currentPage * pokemonPerPage
@@ -26,6 +25,7 @@ export default function App() {
 
 
     const paginate = pageNumber => setCurrentPage(pageNumber)
+
 
     const { data, error } = useSWR(
         "https://pokeapi.co/api/v2/pokemon?limit=100&offset=200",
@@ -36,10 +36,19 @@ export default function App() {
     if (!data) return "Loading...";
 
     const currentPokemons = data.results.slice(firstPokemonsIndex, lastPokemonsIndex)
+
     console.log(paginate)
 
-    return (
 
+    const onClickPage = (event, value) => {
+
+
+        paginate(value);
+    }
+
+
+    return (
+        
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} columns={16}>
                 {
@@ -66,7 +75,8 @@ export default function App() {
                     })
                 }
             </Grid>
-            <Pagination pokemonsPerPage={pokemonPerPage} totalPokemons={data.results.length} paginate={paginate} />
+            <Pagination count={Math.ceil(data.results.length / pokemonPerPage)} onChange={onClickPage} hidePrevButton hideNextButton />
+
         </Box>
 
 
