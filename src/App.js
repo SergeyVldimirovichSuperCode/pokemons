@@ -14,39 +14,43 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function App() {
 
-
+    const [page, setPage] = useState(1)
     const [currentPage, setCurrentPage] = useState(1)
     const [pokemonPerPage] = useState(12)
-
-
-    const lastPokemonsIndex = currentPage * pokemonPerPage
-
-    const firstPokemonsIndex = lastPokemonsIndex - pokemonPerPage
-
-
-    const paginate = pageNumber => setCurrentPage(pageNumber)
-
-
+    const [itemsPerPage, setitemsPerPage] = useState(0)
+   
     const { data, error } = useSWR(
-        "https://pokeapi.co/api/v2/pokemon?limit=100&offset=200",
+        `https://pokeapi.co/api/v2/pokemon?limit=12&offset=${itemsPerPage}`,
         fetcher
     );
 
+  
+
+    
+
+    const paginate = pageNumber => setCurrentPage(pageNumber)
+
+    
+  
     if (error) return "An error has occurred.";
     if (!data) return "Loading...";
-
-    const currentPokemons = data.results.slice(firstPokemonsIndex, lastPokemonsIndex)
-
-    console.log(paginate)
-
-
+    console.log(data)
+    
+    const currentPokemons = data.results.slice(0, pokemonPerPage)
+    const countPokemons = data.count
+   
+   
+    
     const onClickPage = (event, value) => {
-
-
+        
+       
         paginate(value);
+        setPage(value);
+        setitemsPerPage(12*(value-1))
+        
     }
 
-
+ 
     return (
         
         <Box sx={{ flexGrow: 1 }}>
@@ -75,10 +79,7 @@ export default function App() {
                     })
                 }
             </Grid>
-            <Pagination count={Math.ceil(data.results.length / pokemonPerPage)} onChange={onClickPage} hidePrevButton hideNextButton />
-
+            <Pagination count={Math.ceil(countPokemons/12)} page={page} onChange={onClickPage} hidePrevButton hideNextButton />
         </Box>
-
-
     );
 }
