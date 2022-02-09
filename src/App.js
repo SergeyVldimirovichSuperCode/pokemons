@@ -19,7 +19,6 @@ export default function App() {
 
     const { data, error } = useSWR(
         `https://pokeapi.co/api/v2/pokemon?limit=12&offset=${itemsPerPage}`,
-
     );
 
     const paginate = pageNumber => setCurrentPage(pageNumber)
