@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import useSWR from "swr";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
-import Information from "./componets/informations";
-import Image from "./componets/image";
 import Box from '@mui/material/Box';
 import Pagination from '@mui/material/Pagination';
+import CardPokemon from "./componets/card-pokemon";
 
 export default function App() {
 
@@ -22,7 +17,7 @@ export default function App() {
 
     if (error) return "An error has occurred.";
     if (!data) return "Loading...";
-        
+
     const countPokemons = data.count
     console.log(data)
     const onClickPage = (event, value) => {
@@ -38,24 +33,9 @@ export default function App() {
             <Grid container spacing={2} columns={16}>
                 {
                     data.results.map((names) => {
+
                         return (
-
-                            <Grid item xs={8} key={names.name}>
-                                <Card sx={{ maxWidth: 345 }} key={names.name}>
-                                    <CardActionArea>
-                                        <Image link={names.url} />
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h5" component="div" >
-                                                {names.name}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary" >
-                                                <Information link={names.url} />
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </Grid>
-
+                            <CardPokemon link={names.url} name={names.name} key={names.name} />
                         )
                     })
                 }
