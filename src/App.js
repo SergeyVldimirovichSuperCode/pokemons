@@ -8,33 +8,27 @@ import { CardActionArea } from '@mui/material';
 import Information from "./componets/informations";
 import Image from "./componets/image";
 import Box from '@mui/material/Box';
-import { Pagination } from "@mui/material";
+import Pagination from '@mui/material/Pagination';
 
 export default function App() {
 
-    const [page, setPage] = useState(1)
     const [currentPage, setCurrentPage] = useState(1)
-    const [pokemonPerPage] = useState(12)
-    const [itemsPerPage, setItemsPerPage] = useState(0)
+    const itemsPerPage = 12
+    const [offsetPokemons, setOffsetPokemons] = useState(0)
 
     const { data, error } = useSWR(
-        `https://pokeapi.co/api/v2/pokemon?limit=12&offset=${itemsPerPage}`,
+        `https://pokeapi.co/api/v2/pokemon?limit=${itemsPerPage}&offset=${offsetPokemons}`,
     );
-
-    const paginate = pageNumber => setCurrentPage(pageNumber)
 
     if (error) return "An error has occurred.";
     if (!data) return "Loading...";
-    console.log(data)
-
-    const currentPokemons = data.results.slice(0, pokemonPerPage)
+        
     const countPokemons = data.count
-
+    console.log(data)
     const onClickPage = (event, value) => {
 
-        paginate(value);
-        setPage(value);
-        setItemsPerPage(12 * (value - 1))
+        setCurrentPage(value)
+        setOffsetPokemons(itemsPerPage * (value - 1))
 
     }
 
@@ -43,7 +37,7 @@ export default function App() {
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} columns={16}>
                 {
-                    currentPokemons.map((names) => {
+                    data.results.map((names) => {
                         return (
 
                             <Grid item xs={8} key={names.name}>
@@ -66,7 +60,7 @@ export default function App() {
                     })
                 }
             </Grid>
-            <Pagination count={Math.ceil(countPokemons / 12)} page={page} onChange={onClickPage} hidePrevButton hideNextButton />
+            <Pagination count={Math.ceil(countPokemons / 12)} page={currentPage} onChange={onClickPage} hidePrevButton hideNextButton />
         </Box>
     );
 }
