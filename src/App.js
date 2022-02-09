@@ -10,27 +10,19 @@ import Image from "./componets/image";
 import Box from '@mui/material/Box';
 import { Pagination } from "@mui/material";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
 export default function App() {
 
     const [page, setPage] = useState(1)
     const [currentPage, setCurrentPage] = useState(1)
     const [pokemonPerPage] = useState(12)
-    const [itemsPerPage, setitemsPerPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(0)
 
     const { data, error } = useSWR(
         `https://pokeapi.co/api/v2/pokemon?limit=12&offset=${itemsPerPage}`,
-        fetcher
+
     );
 
-
-
-
-
     const paginate = pageNumber => setCurrentPage(pageNumber)
-
-
 
     if (error) return "An error has occurred.";
     if (!data) return "Loading...";
@@ -39,17 +31,13 @@ export default function App() {
     const currentPokemons = data.results.slice(0, pokemonPerPage)
     const countPokemons = data.count
 
-
-
     const onClickPage = (event, value) => {
-
 
         paginate(value);
         setPage(value);
-        setitemsPerPage(12 * (value - 1))
+        setItemsPerPage(12 * (value - 1))
 
     }
-
 
     return (
 

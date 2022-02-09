@@ -2,13 +2,11 @@ import React from "react";
 import useSWR from "swr";
 import CardMedia from '@mui/material/CardMedia';
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Image(link) {
 
     const { data, error } = useSWR(
-        link.link,
-        fetcher
+        link.link
     );
 
     if (error) return "An error has occurred.";
